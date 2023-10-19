@@ -235,12 +235,12 @@ locals {
   umigs = {
     "fgt1-umig" = {
       name = "${local.prefix}-fgt1-umig-${random_string.string.result}"
-      zone = local.region
+      zone = local.zone
       instances = [google_compute_instance.compute_instance["fgt1_instance"].self_link]
     }
     "fgt2-umig" = {
       name = "${local.prefix}-fgt1-umig-${random_string.string.result}"
-      zone = local.region
+      zone = local.zone
       instances = [google_compute_instance.compute_instance["fgt2_instance"].self_link]
     }
   }

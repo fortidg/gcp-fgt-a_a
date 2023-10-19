@@ -178,7 +178,7 @@ resource "google_compute_forwarding_rule" "fwd_rule" {
 
 # Enable outbound connectivity via Cloud NAT
 resource "google_compute_router" "nat_router" {
-  name                   = "${var.prefix}-cr_nat-${random_string.string.result}"
+  name                   = "${var.prefix}-cr-nat-${random_string.string.result}"
   region                 = var.region
   network                = google_compute_subnetwork.compute_subnetwork["untrust-subnet-1"].network
 }
