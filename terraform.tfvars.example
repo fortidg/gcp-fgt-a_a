@@ -10,9 +10,8 @@ prefix = "resource_prefix"
 fortigate_vm_image     = "projects/fortigcp-project-001/global/images/fortinet-fgtondemand-740-20230512-001-w-license"
 fortigate_machine_type = "n2-standard-2"
 fortigate_license_files = {
-  hub_fgt_instance    = { name = null }
-  branch_fgt_instance = { name = null }
-  ztna_fgt_instance   = { name = null }
+  fgt1_instance    = { name = null }
+  fgt2_instance = { name = null }
 }
 admin_port = 8443
 fgt_password = "fortinet"

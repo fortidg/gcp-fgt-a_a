@@ -155,7 +155,7 @@ locals {
       }]
 
       metadata = {
-        user-data = data.template_file.template_file["fgt-template"].rendered
+        user-data = data.template_file.template_file["fgt1-template"].rendered
         license   = local.fortigate_license_files["fgt1_instance"].name != null ? file(local.fortigate_license_files["fgt1_instance"].name) : null
       }
 
@@ -192,7 +192,7 @@ locals {
       }]
 
       metadata = {
-        user-data = data.template_file.template_file["fgt-template"].rendered
+        user-data = data.template_file.template_file["fgt2-template"].rendered
         license   = local.fortigate_license_files["fgt2_instance"].name != null ? file(local.fortigate_license_files["branch_fgt_instance"].name) : null
       }
 
