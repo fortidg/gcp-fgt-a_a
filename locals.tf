@@ -248,7 +248,7 @@ locals {
 # back end sets
   ibess = {
     "ilb_bes1" = {
-      name = "${local.prefix}-ilb_bes1-${random_string.string.result}"
+      name = "${local.prefix}-ilb-bes1-${random_string.string.result}"
       region = local.region
       network = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].self_link
       group1 = google_compute_instance_group.fgt-umigs["fgt1-umig"].self_link
@@ -258,7 +258,7 @@ locals {
 
   ebess = {
     "elb_bes1" = {
-      name = "${local.prefix}-elb_bes1-${random_string.string.result}"
+      name = "${local.prefix}-elb-bes1-${random_string.string.result}"
       region = local.region
       group1 = google_compute_instance_group.fgt-umigs["fgt1-umig"].self_link
       group2 = google_compute_instance_group.fgt-umigs["fgt2-umig"].self_link
@@ -269,7 +269,7 @@ locals {
 
   fwd_rules = {
     "ilb_fwd_1" = {
-      name                   = "${local.prefix}-ilb_fwd_1-${random_string.string.result}"
+      name                   = "${local.prefix}-ilb-fwd_1-${random_string.string.result}"
       region                 = local.region
       network                = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].network
       subnetwork             = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].id
@@ -280,7 +280,7 @@ locals {
       allow_global_access    = true
     }
     "elb_fwd_1" = {
-      name                   = "${local.prefix}-elb_fwd_1-${random_string.string.result}"
+      name                   = "${local.prefix}-elb-fwd_1-${random_string.string.result}"
       region                 = local.region
       network                = null
       subnetwork             = null
