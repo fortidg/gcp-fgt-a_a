@@ -99,7 +99,6 @@ resource "google_compute_instance" "compute_instance" {
   metadata = each.value.metadata
 
   service_account {
-    email  = each.value.service_account_email
     scopes = each.value.service_account_scopes
   }
 
