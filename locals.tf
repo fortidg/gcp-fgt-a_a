@@ -16,24 +16,31 @@ locals {
   compute_addresses = {
     "elb-static-ip" = {
       region       = local.region
-      name         = "${local.prefix}elb-static-ip-${random_string.string.result}"
+      name         = "${local.prefix}-elb-static-ip-${random_string.string.result}"
       subnetwork   = null
       address      = null
       address_type = "EXTERNAL"
     }
     "fgt1-static-ip" = {
       region       = local.region
-      name         = "${local.prefix}fgt1-static-ip-${random_string.string.result}"
+      name         = "${local.prefix}-fgt1-static-ip-${random_string.string.result}"
       subnetwork   = null
       address      = null
       address_type = "EXTERNAL"
     }
     "fgt2-static-ip" = {
       region       = local.region
-      name         = "${local.prefix}fgt2-static-ip-${random_string.string.result}"
+      name         = "${local.prefix}-fgt2-static-ip-${random_string.string.result}"
       subnetwork   = null
       address      = null
       address_type = "EXTERNAL"
+    }
+    "ilb-ip" = {
+      region       = local.region
+      name         = "${local.prefix}-ilb-ip-${random_string.string.result}"
+      subnetwork   = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].id
+      address      = null
+      address_type = "INTERNAL"
     }
   }
 
@@ -218,4 +225,75 @@ locals {
       fgt_password          = var.fgt_password
     }
    }
+
+#######################
+  # load balancers info
+#######################
+
+#instance groups
+
+  umigs = {
+    "fgt1-umig" = {
+      name = "${local.prefix}-fgt1-umig-${random_string.string.result}"
+      zone = local.region
+      instances = google_compute_instance.compute_instance["fgt1_instance"].self_link
+    }
+    "fgt2-umig" = {
+      name = "${local.prefix}-fgt1-umig-${random_string.string.result}"
+      zone = local.region
+      instances = google_compute_instance.compute_instance["fgt2_instance"].self_link
+    }
   }
+
+# back end sets
+  ibess = {
+    "ilb_bes1" = {
+      name = "${local.prefix}-ilb_bes1-${random_string.string.result}"
+      region = local.region
+      network = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].self_link
+      group1 = google_compute_instance_group.fgt-umigs["fgt1-umig"].self_link
+      group2 = google_compute_instance_group.fgt-umigs["fgt2-umig"].self_link
+    }
+  }
+
+  ebess = {
+    "elb_bes1" = {
+      name = "${local.prefix}-elb_bes1-${random_string.string.result}"
+      region = local.region
+      group1 = google_compute_instance_group.fgt-umigs["fgt1-umig"].self_link
+      group2 = google_compute_instance_group.fgt-umigs["fgt2-umig"].self_link
+    }    
+  }
+
+ # forwarding rules
+
+  fwd_rules = {
+    "ilb_fwd_1" = {
+      name                   = "${local.prefix}-ilb_fwd_1-${random_string.string.result}"
+      region                 = local.region
+      network                = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].network
+      subnetwork             = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].id
+      ip_address             = google_compute_address.compute_address["ilb-ip"].address
+      all_ports              = true
+      load_balancing_scheme  = "INTERNAL"
+      backend_service        = google_compute_region_backend_service.ilb_bes["ilb_bes1"].self_link
+      allow_global_access    = true
+    }
+    "elb_fwd_1" = {
+      name                   = "${local.prefix}-elb_fwd_1-${random_string.string.result}"
+      region                 = local.region
+      network                = null
+      subnetwork             = null
+      ip_address             = google_compute_address.compute_address["elb-static-ip"].address
+      all_ports              = true
+      load_balancing_scheme  = "EXTERNAL"
+      backend_service        = google_compute_region_backend_service.ilb_bes["ilb_bes1"].self_link
+      allow_global_access    = null
+    }
+
+  }
+}
+
+
+
+

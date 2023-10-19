@@ -104,3 +104,93 @@ resource "google_compute_instance" "compute_instance" {
 
   allow_stopping_for_update = each.value.allow_stopping_for_update
 }
+
+
+resource "google_compute_instance_group" "fgt-umigs" {
+  for_each = local.umigs
+
+  name                   = each.value.name
+  zone                   = each.value.zone
+  instances              = each.value.instances
+}
+
+resource "google_compute_region_health_check" "health_check" {
+  name                   = "${var.prefix}healthcheck-http${var.healthcheck_port}-${var.region}"
+  region                 = var.region
+  timeout_sec            = 2
+  check_interval_sec     = 2
+
+  http_health_check {
+    port                 = var.healthcheck_port
+  }
+}
+
+resource "google_compute_region_backend_service" "ilb_bes" {
+  for_each = local.ibess
+
+  name                   = each.value.name
+  region                 = each.value.region
+  network                = each.value.network
+
+  backend {
+    group                = each.value.group1
+  }
+  backend {
+    group                = each.value.group2
+  }
+
+  health_checks          = [google_compute_region_health_check.health_check.self_link]
+  
+}
+
+resource "google_compute_region_backend_service" "elb_bes" {
+  for_each = local.ebess
+
+  name                   = each.value.name
+  region                 = var.region
+  load_balancing_scheme  = "EXTERNAL"
+  protocol               = "UNSPECIFIED"
+
+  backend {
+    group                = each.value.group1
+  }
+  backend {
+    group                = each.value.group2
+  }
+
+  health_checks          = [google_compute_region_health_check.health_check.self_link]
+  
+}
+
+resource "google_compute_forwarding_rule" "fwd_rule" {
+  for_each = local.fwd_rules
+  name                   = each.value.name
+  region                 = each.value.region
+  network                = each.value.network
+  subnetwork             = each.value.subnetwork
+  ip_address             = each.value.ip_address
+  all_ports              = true
+  load_balancing_scheme  = each.value.load_balancing_scheme
+  backend_service        = each.value.backend_service
+  allow_global_access    = true
+}
+
+
+# Enable outbound connectivity via Cloud NAT
+resource "google_compute_router" "nat_router" {
+  name                   = "${var.prefix}-cr_nat-${random_string.string.result}"
+  region                 = var.region
+  network                = google_compute_subnetwork.compute_subnetwork["untrust-subnet-1"].network
+}
+
+resource "google_compute_router_nat" "cloud_nat" {
+  name                   = "${var.prefix}nat-cloudnat-${var.region}"
+  router                 = google_compute_router.nat_router.name
+  region                 = var.region
+  nat_ip_allocate_option = "AUTO_ONLY"
+  source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
+  subnetwork {
+    name                    = google_compute_subnetwork.compute_subnetwork["untrust-subnet-1"].self_link
+    source_ip_ranges_to_nat = ["ALL_IP_RANGES"]
+  }
+}
