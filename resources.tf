@@ -125,30 +125,13 @@ resource "google_compute_region_health_check" "health_check" {
   }
 }
 
-resource "google_compute_region_backend_service" "ilb_bes" {
-  for_each = local.ibess
 
-  name                   = each.value.name
-  region                 = each.value.region
-  /* network                = each.value.network */
-
-  backend {
-    group                = each.value.group1
-  }
-  backend {
-    group                = each.value.group2
-  }
-
-  health_checks          = [google_compute_region_health_check.health_check.self_link]
-  
-}
-
-resource "google_compute_region_backend_service" "elb_bes" {
-  for_each = local.ebess
+resource "google_compute_region_backend_service" "bes" {
+  for_each = local.bess
 
   name                   = each.value.name
   region                 = var.region
-  load_balancing_scheme  = "EXTERNAL"
+  load_balancing_scheme  = each.value.load_balancing_scheme
   protocol               = "UNSPECIFIED"
 
   backend {
