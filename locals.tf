@@ -253,7 +253,7 @@ locals {
     "ilb_bes1" = {
       name = "${local.prefix}-ilb-bes1-${random_string.string.result}"
       region = local.region
-      network = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].self_link
+      /* network = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].self_link */
       group1 = google_compute_instance_group.fgt-umigs["fgt1-umig"].self_link
       group2 = google_compute_instance_group.fgt-umigs["fgt2-umig"].self_link
     }

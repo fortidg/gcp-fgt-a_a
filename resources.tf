@@ -130,7 +130,7 @@ resource "google_compute_region_backend_service" "ilb_bes" {
 
   name                   = each.value.name
   region                 = each.value.region
-  network                = each.value.network
+  /* network                = each.value.network */
 
   backend {
     group                = each.value.group1
