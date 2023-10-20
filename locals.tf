@@ -273,7 +273,7 @@ locals {
     "ilb_fwd_1" = {
       name                   = "${local.prefix}-ilb-fwd-1-${random_string.string.result}"
       region                 = local.region
-      network                = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].network
+      network                = google_compute_network.compute_network["trust-vpc"].self_link
       subnetwork             = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].name
       ip_address             = google_compute_address.compute_address["ilb-ip"].address
       all_ports              = true
