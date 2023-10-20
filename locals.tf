@@ -124,7 +124,7 @@ locals {
       name = "fgt2-logdisk-${random_string.string.result}"
       size = 30
       type = "pd-standard"
-      zone = local.zone
+      zone = local.zone2
     }
   }
 
