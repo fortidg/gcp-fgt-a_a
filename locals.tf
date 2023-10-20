@@ -4,6 +4,7 @@ locals {
 
   region          = var.region
   zone            = var.zone
+  zone2           = var.zone2
 
   fortigate_machine_type  = var.fortigate_machine_type
   fortigate_vm_image      = var.fortigate_vm_image
@@ -171,7 +172,7 @@ locals {
 
     fgt2_instance = {
       name         = "${local.prefix}-fgt2-${random_string.string.result}"
-      zone         = local.zone
+      zone         = local.zone2
       machine_type = local.fortigate_machine_type
 
       can_ip_forward = "true"
@@ -217,12 +218,14 @@ locals {
       template_file         = "fgt.tpl"
       admin_port            = var.admin_port
       fgt_password          = var.fgt_password
+      healthcheck_port      = var.healthcheck_port
     }
     "fgt2-template" = {
       fgt_name              = "fgt2"
       template_file         = "fgt.tpl"
       admin_port            = var.admin_port
       fgt_password          = var.fgt_password
+      healthcheck_port      = var.healthcheck_port
     }
    }
 
@@ -240,7 +243,7 @@ locals {
     }
     "fgt2-umig" = {
       name = "${local.prefix}-fgt2-umig-${random_string.string.result}"
-      zone = local.zone
+      zone = local.zone2
       instances = [google_compute_instance.compute_instance["fgt2_instance"].self_link]
     }
   }
@@ -272,7 +275,7 @@ locals {
       name                   = "${local.prefix}-ilb-fwd_1-${random_string.string.result}"
       region                 = local.region
       network                = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].network
-      subnetwork             = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].id
+      subnetwork             = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].name
       ip_address             = google_compute_address.compute_address["ilb-ip"].address
       all_ports              = true
       load_balancing_scheme  = "INTERNAL"

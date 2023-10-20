@@ -1,6 +1,7 @@
 project               = "project_name"
 region                = "region_name"
 zone                  = "zone_name"
+zone2                  = "zone2_name"
 
 # Prefixed to all resources
 prefix = "resource_prefix"

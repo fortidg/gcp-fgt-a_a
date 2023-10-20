@@ -1,6 +1,7 @@
 variable "project" {}
 variable "region" {}
 variable "zone" {}
+variable "zone2" {}
 
 variable "prefix" {}
 
