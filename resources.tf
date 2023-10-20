@@ -127,7 +127,7 @@ resource "google_compute_region_health_check" "health_check" {
 
 
 resource "google_compute_region_backend_service" "bes" {
-  for_each = local.bess
+  for_each = local.ebess
 
   name                   = each.value.name
   region                 = var.region
@@ -145,8 +145,8 @@ resource "google_compute_region_backend_service" "bes" {
   
 }
 
-resource "google_compute_forwarding_rule" "fwd_rule" {
-  for_each = local.fwd_rules
+resource "google_compute_forwarding_rule" "ifwd_rule" {
+  for_each = local.ifwd_rules
   name                   = each.value.name
   region                 = each.value.region
   network                = each.value.network
@@ -158,6 +158,18 @@ resource "google_compute_forwarding_rule" "fwd_rule" {
   allow_global_access    = true
 }
 
+resource "google_compute_forwarding_rule" "efwd_rule" {
+  for_each = local.efwd_rules
+  name                   = each.value.name
+  region                 = each.value.region
+  network                = each.value.network
+  subnetwork             = each.value.subnetwork
+  ip_address             = each.value.ip_address
+  all_ports              = true
+  load_balancing_scheme  = each.value.load_balancing_scheme
+  backend_service        = each.value.backend_service
+
+}
 
 # Enable outbound connectivity via Cloud NAT
 resource "google_compute_router" "nat_router" {

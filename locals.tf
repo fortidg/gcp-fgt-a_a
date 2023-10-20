@@ -249,15 +249,17 @@ locals {
   }
 
 # back end sets
-  bess = {
+  ibess = {
     "ilb_bes1" = {
       name = "${local.prefix}-ilb-bes1-${random_string.string.result}"
       region = local.region
       load_balancing_scheme  = "INTERNAL"
-      /* network = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].self_link */
+      network = google_compute_network.compute_network["trust-vpc"].self_link
       group1 = google_compute_instance_group.fgt-umigs["fgt1-umig"].self_link
       group2 = google_compute_instance_group.fgt-umigs["fgt2-umig"].self_link
     }
+  }
+  ebess = {  
     "elb_bes1" = {
       name = "${local.prefix}-elb-bes1-${random_string.string.result}"
       region = local.region
@@ -269,7 +271,7 @@ locals {
 
  # forwarding rules
 
-  fwd_rules = {
+  ifwd_rules = {
     "ilb_fwd_1" = {
       name                   = "${local.prefix}-ilb-fwd-1-${random_string.string.result}"
       region                 = local.region
@@ -281,6 +283,8 @@ locals {
       backend_service        = google_compute_region_backend_service.bes["ilb_bes1"].self_link
       allow_global_access    = true
     }
+  }
+  efwd_rules = {
     "elb_fwd_1" = {
       name                   = "${local.prefix}-elb-fwd-1-${random_string.string.result}"
       region                 = local.region
@@ -290,7 +294,6 @@ locals {
       all_ports              = true
       load_balancing_scheme  = "EXTERNAL"
       backend_service        = google_compute_region_backend_service.bes["elb_bes1"].self_link
-      allow_global_access    = null
     }
 
   }
