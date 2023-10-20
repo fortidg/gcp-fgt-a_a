@@ -249,20 +249,20 @@ locals {
   }
 
   # back end sets
-  bess = {
+  ibess = {
     "ilb_bes1" = {
       name                  = "${local.prefix}-ilb-bes1-${random_string.string.result}"
       region                = local.region
-      load_balancing_scheme = "INTERNAL"
       network               = google_compute_network.compute_network["trust-vpc"].self_link
       group1                = google_compute_instance_group.fgt-umigs["fgt1-umig"].self_link
       group2                = google_compute_instance_group.fgt-umigs["fgt2-umig"].self_link
     }
+  }
+  ebess = {
     "elb_bes1" = {
       name                  = "${local.prefix}-elb-bes1-${random_string.string.result}"
       region                = local.region
       load_balancing_scheme = "EXTERNAL"
-      network               = null
       group1                = google_compute_instance_group.fgt-umigs["fgt1-umig"].self_link
       group2                = google_compute_instance_group.fgt-umigs["fgt2-umig"].self_link
     }
@@ -279,7 +279,7 @@ locals {
       ip_address            = google_compute_address.compute_address["ilb-ip"].address
       all_ports             = true
       load_balancing_scheme = "INTERNAL"
-      backend_service       = google_compute_region_backend_service.bes["ilb_bes1"].self_link
+      backend_service       = google_compute_region_backend_service.ibes["ilb_bes1"].self_link
       allow_global_access   = true
     }
   }
@@ -292,7 +292,7 @@ locals {
       ip_address            = google_compute_address.compute_address["elb-static-ip"].address
       all_ports             = true
       load_balancing_scheme = "EXTERNAL"
-      backend_service       = google_compute_region_backend_service.bes["elb_bes1"].self_link
+      backend_service       = google_compute_region_backend_service.ebes["elb_bes1"].self_link
     }
 
   }
