@@ -127,7 +127,7 @@ resource "google_compute_region_health_check" "health_check" {
 
 
 resource "google_compute_region_backend_service" "bes" {
-  for_each = local.ebess
+  for_each = local.bess
 
   name                   = each.value.name
   region                 = var.region

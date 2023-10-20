@@ -249,7 +249,7 @@ locals {
   }
 
 # back end sets
-  ibess = {
+  bess = {
     "ilb_bes1" = {
       name = "${local.prefix}-ilb-bes1-${random_string.string.result}"
       region = local.region
@@ -258,8 +258,6 @@ locals {
       group1 = google_compute_instance_group.fgt-umigs["fgt1-umig"].self_link
       group2 = google_compute_instance_group.fgt-umigs["fgt2-umig"].self_link
     }
-  }
-  ebess = {  
     "elb_bes1" = {
       name = "${local.prefix}-elb-bes1-${random_string.string.result}"
       region = local.region
