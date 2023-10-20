@@ -16,10 +16,48 @@ end
 
 config system interface
   edit port1
-     set allowaccess probe-response https ssh
+     set mode static
+     set ip ${port1-ip}/32
+     set allowaccess https ssh
+     set secondary-IP enable
+     config secondaryip
+       edit 0
+         set ip ${elb_ip}/32
+         set allowaccess probe-response
+       next   
   next
   edit port2
-  set allowaccess probe-response
+    set mode static
+    set ip ${port2-ip}/32
+    set allowaccess probe-response
+    set secondary-IP enable
+     config secondaryip
+       edit 0
+         set ip ${ilb_ip}/32
+         set allowaccess probe-response
+       next
+  next
+end
+
+config router static
+  edit 0
+    set device port1
+    set gateway ${ext_gw}
+  next
+  edit 0
+    set device port2
+    set dst ${int_cidr}
+    set gateway ${int_gw}
+  next
+  edit 0
+    set device port2
+    set dst 35.191.0.0/16
+    set gateway ${int_gw}
+  next
+  edit 0
+    set device port2
+    set dst 130.211.0.0/22
+    set gateway ${int_gw}
   next
 end
 

@@ -1,9 +1,9 @@
 # FGT-IP
-output "fgt_ip_hub" {
+output "fgt1_ip" {
   value = format("https://%s:8443", google_compute_address.compute_address["fgt1-static-ip"].address)
 }
 
-output "fgt_ip_branch" {
+output "fgt2_ip" {
   value = format("https://%s:8443", google_compute_address.compute_address["fgt2-static-ip"].address)
 }
 

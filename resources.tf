@@ -115,7 +115,7 @@ resource "google_compute_instance_group" "fgt-umigs" {
 }
 
 resource "google_compute_region_health_check" "health_check" {
-  name               = "${var.prefix}healthcheck-http${var.healthcheck_port}-${var.region}"
+  name               = "${var.prefix}-healthcheck-http${var.healthcheck_port}-${var.region}"
   region             = var.region
   timeout_sec        = 2
   check_interval_sec = 2

@@ -43,6 +43,34 @@ locals {
       address      = null
       address_type = "INTERNAL"
     }
+    "fgt1-trust-ip" = {
+      region       = local.region
+      name         = "${local.prefix}-fgt1-trust-ip-${random_string.string.result}"
+      subnetwork   = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].id
+      address      = null
+      address_type = "INTERNAL"
+    }
+    "fgt2-trust-ip" = {
+      region       = local.region
+      name         = "${local.prefix}-fgt2-trust-ip-${random_string.string.result}"
+      subnetwork   = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].id
+      address      = null
+      address_type = "INTERNAL"
+    }
+    "fgt1-untrust-ip" = {
+      region       = local.region
+      name         = "${local.prefix}-fgt1-untrust-ip-${random_string.string.result}"
+      subnetwork   = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].id
+      address      = null
+      address_type = "INTERNAL"
+    }
+    "fgt2-untrust-ip" = {
+      region       = local.region
+      name         = "${local.prefix}-fgt2-untrust-ip-${random_string.string.result}"
+      subnetwork   = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].id
+      address      = null
+      address_type = "INTERNAL"
+    }
   }
 
   #######################
@@ -150,7 +178,7 @@ locals {
       network_interface = [{
         network    = google_compute_network.compute_network["untrust-vpc"].name
         subnetwork = google_compute_subnetwork.compute_subnetwork["untrust-subnet-1"].name
-        network_ip = null
+        network_ip = google_compute_address.compute_address["fgt1-untrust-ip"].address
         access_config = [{
           nat_ip = google_compute_address.compute_address["fgt1-static-ip"].address
         }]
@@ -158,7 +186,7 @@ locals {
         {
           network       = google_compute_network.compute_network["trust-vpc"].name
           subnetwork    = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].name
-          network_ip    = null
+          network_ip    = google_compute_address.compute_address["fgt1-trust-ip"].address
           access_config = []
       }]
 
@@ -187,7 +215,7 @@ locals {
       network_interface = [{
         network    = google_compute_network.compute_network["untrust-vpc"].name
         subnetwork = google_compute_subnetwork.compute_subnetwork["untrust-subnet-1"].name
-        network_ip = null
+        network_ip = google_compute_address.compute_address["fgt2-untrust-ip"].address
         access_config = [{
           nat_ip = google_compute_address.compute_address["fgt2-static-ip"].address
         }]
@@ -195,7 +223,7 @@ locals {
         {
           network       = google_compute_network.compute_network["trust-vpc"].name
           subnetwork    = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].name
-          network_ip    = null
+          network_ip    = google_compute_address.compute_address["fgt2-untrust-ip"].address
           access_config = []
       }]
 
@@ -219,6 +247,10 @@ locals {
       admin_port       = var.admin_port
       fgt_password     = var.fgt_password
       healthcheck_port = var.healthcheck_port
+      port1-ip = google_compute_address.compute_address["fgt1-untrust-ip"].address
+      port2-ip = google_compute_address.compute_address["fgt1-trust-ip"].address
+      elb_ip = google_compute_address.compute_address["elb-static-ip"].address
+      ilb_ip = google_compute_address.compute_address["ilb-ip"].address
     }
     "fgt2-template" = {
       fgt_name         = "fgt2"
@@ -226,6 +258,10 @@ locals {
       admin_port       = var.admin_port
       fgt_password     = var.fgt_password
       healthcheck_port = var.healthcheck_port
+      port1-ip = google_compute_address.compute_address["fgt2-untrust-ip"].address
+      port2-ip = google_compute_address.compute_address["fgt2-trust-ip"].address
+      elb_ip = google_compute_address.compute_address["elb-static-ip"].address
+      ilb_ip = google_compute_address.compute_address["ilb-ip"].address
     }
   }
 
