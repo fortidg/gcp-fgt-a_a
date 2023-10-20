@@ -289,7 +289,7 @@ locals {
       ip_address             = google_compute_address.compute_address["elb-static-ip"].address
       all_ports              = true
       load_balancing_scheme  = "EXTERNAL"
-      backend_service        = google_compute_region_backend_service.bes["ilb_bes1"].self_link
+      backend_service        = google_compute_region_backend_service.bes["elb_bes1"].self_link
       allow_global_access    = null
     }
 
