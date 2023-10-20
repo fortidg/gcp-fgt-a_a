@@ -2,17 +2,17 @@ locals {
 
   prefix = var.prefix
 
-  region          = var.region
-  zone            = var.zone
-  zone2           = var.zone2
+  region = var.region
+  zone   = var.zone
+  zone2  = var.zone2
 
   fortigate_machine_type  = var.fortigate_machine_type
   fortigate_vm_image      = var.fortigate_vm_image
   fortigate_license_files = var.fortigate_license_files
 
-#######################
+  #######################
   # Static IPs
-#######################
+  #######################
 
   compute_addresses = {
     "elb-static-ip" = {
@@ -45,9 +45,9 @@ locals {
     }
   }
 
-#######################
+  #######################
   # Compute Networks
-#######################
+  #######################
 
   compute_networks = {
     "untrust-vpc" = {
@@ -63,9 +63,9 @@ locals {
       routing_mode            = "REGIONAL"
     }
   }
-#######################
+  #######################
   # Compute Subnets
-#######################
+  #######################
 
   compute_subnetworks = {
     "untrust-subnet-1" = {
@@ -82,9 +82,9 @@ locals {
     }
   }
 
-#######################
+  #######################
   # Compute Firewalls
-#######################
+  #######################
 
   compute_firewalls = {
     "untrust-vpc-ingress" = {
@@ -109,9 +109,9 @@ locals {
     }
   }
 
-#######################
+  #######################
   # Compute disks
-#######################
+  #######################
 
   compute_disks = {
     "fgt1-logdisk" = {
@@ -128,9 +128,9 @@ locals {
     }
   }
 
-#######################
+  #######################
   # Compute instances
-#######################
+  #######################
 
   compute_instances = {
     fgt1_instance = {
@@ -166,7 +166,7 @@ locals {
         user-data = data.template_file.template_file["fgt1-template"].rendered
         license   = local.fortigate_license_files["fgt1_instance"].name != null ? file(local.fortigate_license_files["fgt1_instance"].name) : null
       }
-      service_account_scopes = ["cloud-platform"]
+      service_account_scopes    = ["cloud-platform"]
       allow_stopping_for_update = true
     }
 
@@ -203,95 +203,96 @@ locals {
         user-data = data.template_file.template_file["fgt2-template"].rendered
         license   = local.fortigate_license_files["fgt2_instance"].name != null ? file(local.fortigate_license_files["branch_fgt_instance"].name) : null
       }
-      service_account_scopes = ["cloud-platform"]
+      service_account_scopes    = ["cloud-platform"]
       allow_stopping_for_update = true
     }
   }
 
-#######################
+  #######################
   # Template Files
-#######################
+  #######################
 
   template_files = {
     "fgt1-template" = {
-      fgt_name              = "fgt1"
-      template_file         = "fgt.tpl"
-      admin_port            = var.admin_port
-      fgt_password          = var.fgt_password
-      healthcheck_port      = var.healthcheck_port
+      fgt_name         = "fgt1"
+      template_file    = "fgt.tpl"
+      admin_port       = var.admin_port
+      fgt_password     = var.fgt_password
+      healthcheck_port = var.healthcheck_port
     }
     "fgt2-template" = {
-      fgt_name              = "fgt2"
-      template_file         = "fgt.tpl"
-      admin_port            = var.admin_port
-      fgt_password          = var.fgt_password
-      healthcheck_port      = var.healthcheck_port
+      fgt_name         = "fgt2"
+      template_file    = "fgt.tpl"
+      admin_port       = var.admin_port
+      fgt_password     = var.fgt_password
+      healthcheck_port = var.healthcheck_port
     }
-   }
+  }
 
-#######################
+  #######################
   # load balancers info
-#######################
+  #######################
 
-#instance groups
+  #instance groups
 
   umigs = {
     "fgt1-umig" = {
-      name = "${local.prefix}-fgt1-umig-${random_string.string.result}"
-      zone = local.zone
+      name      = "${local.prefix}-fgt1-umig-${random_string.string.result}"
+      zone      = local.zone
       instances = [google_compute_instance.compute_instance["fgt1_instance"].self_link]
     }
     "fgt2-umig" = {
-      name = "${local.prefix}-fgt2-umig-${random_string.string.result}"
-      zone = local.zone2
+      name      = "${local.prefix}-fgt2-umig-${random_string.string.result}"
+      zone      = local.zone2
       instances = [google_compute_instance.compute_instance["fgt2_instance"].self_link]
     }
   }
 
-# back end sets
+  # back end sets
   bess = {
     "ilb_bes1" = {
-      name = "${local.prefix}-ilb-bes1-${random_string.string.result}"
-      region = local.region
-      load_balancing_scheme  = "INTERNAL"
-      network = google_compute_network.compute_network["trust-vpc"].self_link
-      group1 = google_compute_instance_group.fgt-umigs["fgt1-umig"].self_link
-      group2 = google_compute_instance_group.fgt-umigs["fgt2-umig"].self_link
+      name                  = "${local.prefix}-ilb-bes1-${random_string.string.result}"
+      region                = local.region
+      load_balancing_scheme = "INTERNAL"
+      network               = google_compute_network.compute_network["trust-vpc"].self_link
+      group1                = google_compute_instance_group.fgt-umigs["fgt1-umig"].self_link
+      group2                = google_compute_instance_group.fgt-umigs["fgt2-umig"].self_link
     }
     "elb_bes1" = {
-      name = "${local.prefix}-elb-bes1-${random_string.string.result}"
-      region = local.region
-      load_balancing_scheme  = "EXTERNAL"
-      group1 = google_compute_instance_group.fgt-umigs["fgt1-umig"].self_link
-      group2 = google_compute_instance_group.fgt-umigs["fgt2-umig"].self_link
-    }    
+      name                  = "${local.prefix}-elb-bes1-${random_string.string.result}"
+      region                = local.region
+      load_balancing_scheme = "EXTERNAL"
+      network               = null
+      group1                = google_compute_instance_group.fgt-umigs["fgt1-umig"].self_link
+      group2                = google_compute_instance_group.fgt-umigs["fgt2-umig"].self_link
+    }
   }
 
- # forwarding rules
+  # forwarding rules
 
   ifwd_rules = {
     "ilb_fwd_1" = {
-      name                   = "${local.prefix}-ilb-fwd-1-${random_string.string.result}"
-      region                 = local.region
-      network                = google_compute_network.compute_network["trust-vpc"].self_link
-      subnetwork             = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].name
-      ip_address             = google_compute_address.compute_address["ilb-ip"].address
-      all_ports              = true
-      load_balancing_scheme  = "INTERNAL"
-      backend_service        = google_compute_region_backend_service.bes["ilb_bes1"].self_link
-      allow_global_access    = true
+      name                  = "${local.prefix}-ilb-fwd-1-${random_string.string.result}"
+      region                = local.region
+      network               = google_compute_network.compute_network["trust-vpc"].self_link
+      subnetwork            = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].name
+      ip_address            = google_compute_address.compute_address["ilb-ip"].address
+      all_ports             = true
+      load_balancing_scheme = "INTERNAL"
+      backend_service       = google_compute_region_backend_service.bes["ilb_bes1"].self_link
+      allow_global_access   = true
     }
   }
   efwd_rules = {
     "elb_fwd_1" = {
-      name                   = "${local.prefix}-elb-fwd-1-${random_string.string.result}"
-      region                 = local.region
-      network                = null
-      subnetwork             = null
-      ip_address             = google_compute_address.compute_address["elb-static-ip"].address
-      all_ports              = true
-      load_balancing_scheme  = "EXTERNAL"
-      backend_service        = google_compute_region_backend_service.bes["elb_bes1"].self_link
+      name                  = "${local.prefix}-elb-fwd-1-${random_string.string.result}"
+      region                = local.region
+      network               = null
+      subnetwork            = null
+      ip_address            = google_compute_address.compute_address["elb-static-ip"].address
+      all_ports             = true
+      load_balancing_scheme = "EXTERNAL"
+      backend_service       = google_compute_region_backend_service.bes["elb_bes1"].self_link
     }
 
   }

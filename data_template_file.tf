@@ -3,9 +3,9 @@ data "template_file" "template_file" {
 
   template = file("${path.module}/templates/${each.value.template_file}")
   vars = {
-    fgt_name              = each.value.fgt_name
-    admin_port            = var.admin_port
-    fgt_password          = var.fgt_password
-    healthcheck_port      = var.healthcheck_port
+    fgt_name         = each.value.fgt_name
+    admin_port       = var.admin_port
+    fgt_password     = var.fgt_password
+    healthcheck_port = var.healthcheck_port
   }
 }

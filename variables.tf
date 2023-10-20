@@ -30,7 +30,7 @@ variable "enable_output" {
   description = "Debug"
 }
 
-variable healthcheck_port {
+variable "healthcheck_port" {
   type        = number
   default     = 8008
   description = "Port used for LB health checks"

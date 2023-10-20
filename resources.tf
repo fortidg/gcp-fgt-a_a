@@ -109,19 +109,19 @@ resource "google_compute_instance" "compute_instance" {
 resource "google_compute_instance_group" "fgt-umigs" {
   for_each = local.umigs
 
-  name                   = each.value.name
-  zone                   = each.value.zone
-  instances              = each.value.instances
+  name      = each.value.name
+  zone      = each.value.zone
+  instances = each.value.instances
 }
 
 resource "google_compute_region_health_check" "health_check" {
-  name                   = "${var.prefix}healthcheck-http${var.healthcheck_port}-${var.region}"
-  region                 = var.region
-  timeout_sec            = 2
-  check_interval_sec     = 2
+  name               = "${var.prefix}healthcheck-http${var.healthcheck_port}-${var.region}"
+  region             = var.region
+  timeout_sec        = 2
+  check_interval_sec = 2
 
   http_health_check {
-    port                 = var.healthcheck_port
+    port = var.healthcheck_port
   }
 }
 
@@ -129,60 +129,61 @@ resource "google_compute_region_health_check" "health_check" {
 resource "google_compute_region_backend_service" "bes" {
   for_each = local.bess
 
-  name                   = each.value.name
-  region                 = var.region
-  load_balancing_scheme  = each.value.load_balancing_scheme
-  protocol               = "UNSPECIFIED"
+  name                  = each.value.name
+  region                = var.region
+  load_balancing_scheme = each.value.load_balancing_scheme
+  network               = each.value.network
+  protocol              = "UNSPECIFIED"
 
   backend {
-    group                = each.value.group1
+    group = each.value.group1
   }
   backend {
-    group                = each.value.group2
+    group = each.value.group2
   }
 
-  health_checks          = [google_compute_region_health_check.health_check.self_link]
-  
+  health_checks = [google_compute_region_health_check.health_check.self_link]
+
 }
 
 resource "google_compute_forwarding_rule" "ifwd_rule" {
-  for_each = local.ifwd_rules
-  name                   = each.value.name
-  region                 = each.value.region
-  network                = each.value.network
-  subnetwork             = each.value.subnetwork
-  ip_address             = each.value.ip_address
-  all_ports              = true
-  load_balancing_scheme  = each.value.load_balancing_scheme
-  backend_service        = each.value.backend_service
-  allow_global_access    = true
+  for_each              = local.ifwd_rules
+  name                  = each.value.name
+  region                = each.value.region
+  network               = each.value.network
+  subnetwork            = each.value.subnetwork
+  ip_address            = each.value.ip_address
+  all_ports             = true
+  load_balancing_scheme = each.value.load_balancing_scheme
+  backend_service       = each.value.backend_service
+  allow_global_access   = true
 }
 
 resource "google_compute_forwarding_rule" "efwd_rule" {
-  for_each = local.efwd_rules
-  name                   = each.value.name
-  region                 = each.value.region
-  network                = each.value.network
-  subnetwork             = each.value.subnetwork
-  ip_address             = each.value.ip_address
-  all_ports              = true
-  load_balancing_scheme  = each.value.load_balancing_scheme
-  backend_service        = each.value.backend_service
+  for_each              = local.efwd_rules
+  name                  = each.value.name
+  region                = each.value.region
+  network               = each.value.network
+  subnetwork            = each.value.subnetwork
+  ip_address            = each.value.ip_address
+  all_ports             = true
+  load_balancing_scheme = each.value.load_balancing_scheme
+  backend_service       = each.value.backend_service
 
 }
 
 # Enable outbound connectivity via Cloud NAT
 resource "google_compute_router" "nat_router" {
-  name                   = "${var.prefix}-cr-nat-${random_string.string.result}"
-  region                 = var.region
-  network                = google_compute_subnetwork.compute_subnetwork["untrust-subnet-1"].network
+  name    = "${var.prefix}-cr-nat-${random_string.string.result}"
+  region  = var.region
+  network = google_compute_subnetwork.compute_subnetwork["untrust-subnet-1"].network
 }
 
 resource "google_compute_router_nat" "cloud_nat" {
-  name                   = "${var.prefix}nat-cloudnat-${var.region}"
-  router                 = google_compute_router.nat_router.name
-  region                 = var.region
-  nat_ip_allocate_option = "AUTO_ONLY"
+  name                               = "${var.prefix}nat-cloudnat-${var.region}"
+  router                             = google_compute_router.nat_router.name
+  region                             = var.region
+  nat_ip_allocate_option             = "AUTO_ONLY"
   source_subnetwork_ip_ranges_to_nat = "LIST_OF_SUBNETWORKS"
   subnetwork {
     name                    = google_compute_subnetwork.compute_subnetwork["untrust-subnet-1"].self_link
