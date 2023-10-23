@@ -247,10 +247,12 @@ locals {
       admin_port       = var.admin_port
       fgt_password     = var.fgt_password
       healthcheck_port = var.healthcheck_port
-      port1-ip = google_compute_address.compute_address["fgt1-untrust-ip"].address
-      port2-ip = google_compute_address.compute_address["fgt1-trust-ip"].address
+      port1_ip = google_compute_address.compute_address["fgt1-untrust-ip"].address
+      port2_ip = google_compute_address.compute_address["fgt1-trust-ip"].address
       elb_ip = google_compute_address.compute_address["elb-static-ip"].address
       ilb_ip = google_compute_address.compute_address["ilb-ip"].address
+      ext_gw = google_compute_subnetwork.compute_subnetwork["untrust-subnet-1"].gateway_address
+      int_gw = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].gateway_address
     }
     "fgt2-template" = {
       fgt_name         = "fgt2"
@@ -262,6 +264,8 @@ locals {
       port2-ip = google_compute_address.compute_address["fgt2-trust-ip"].address
       elb_ip = google_compute_address.compute_address["elb-static-ip"].address
       ilb_ip = google_compute_address.compute_address["ilb-ip"].address
+      ext_gw = google_compute_subnetwork.compute_subnetwork["untrust-subnet-1"].gateway_address
+      int_gw = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].gateway_address
     }
   }
 

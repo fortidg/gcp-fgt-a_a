@@ -17,7 +17,7 @@ end
 config system interface
   edit port1
      set mode static
-     set ip ${port1-ip}/32
+     set ip ${port1_ip}/32
      set allowaccess https ssh
      set secondary-IP enable
      config secondaryip
@@ -28,7 +28,7 @@ config system interface
   next
   edit port2
     set mode static
-    set ip ${port2-ip}/32
+    set ip ${port2_ip}/32
     set allowaccess probe-response
     set secondary-IP enable
      config secondaryip
@@ -43,11 +43,6 @@ config router static
   edit 0
     set device port1
     set gateway ${ext_gw}
-  next
-  edit 0
-    set device port2
-    set dst ${int_cidr}
-    set gateway ${int_gw}
   next
   edit 0
     set device port2
@@ -69,7 +64,7 @@ end
 
 config firewall policy
     edit 1
-        set name "$outbound"
+        set name "outbound"
         set srcintf "port2"
         set dstintf "port1"
         set action accept
