@@ -223,7 +223,7 @@ locals {
         {
           network       = google_compute_network.compute_network["trust-vpc"].name
           subnetwork    = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].name
-          network_ip    = google_compute_address.compute_address["fgt2-untrust-ip"].address
+          network_ip    = google_compute_address.compute_address["fgt2-trust-ip"].address
           access_config = []
       }]
 
