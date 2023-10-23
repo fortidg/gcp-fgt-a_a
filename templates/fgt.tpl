@@ -37,6 +37,7 @@ config system interface
          set ip ${ilb_ip}/32
          set allowaccess probe-response
        next
+  end
   next
 end
 
