@@ -24,7 +24,8 @@ config system interface
        edit 0
          set ip ${elb_ip}/32
          set allowaccess probe-response
-       next   
+       next
+  end   
   next
   edit port2
     set mode static
