@@ -60,14 +60,14 @@ locals {
     "fgt1-untrust-ip" = {
       region       = local.region
       name         = "${local.prefix}-fgt1-untrust-ip-${random_string.string.result}"
-      subnetwork   = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].id
+      subnetwork   = google_compute_subnetwork.compute_subnetwork["untrust-subnet-1"].id
       address      = null
       address_type = "INTERNAL"
     }
     "fgt2-untrust-ip" = {
       region       = local.region
       name         = "${local.prefix}-fgt2-untrust-ip-${random_string.string.result}"
-      subnetwork   = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].id
+      subnetwork   = google_compute_subnetwork.compute_subnetwork["untrust-subnet-1"].id
       address      = null
       address_type = "INTERNAL"
     }
