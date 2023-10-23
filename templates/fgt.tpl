@@ -17,7 +17,7 @@ end
 config system interface
   edit port1
      set mode static
-     set ip ${port1_ip}/32
+     set ip ${port1-ip}/32
      set allowaccess https ssh
      set secondary-IP enable
      config secondaryip
@@ -28,7 +28,7 @@ config system interface
   next
   edit port2
     set mode static
-    set ip ${port2_ip}/32
+    set ip ${port2-ip}/32
     set allowaccess probe-response
     set secondary-IP enable
      config secondaryip
