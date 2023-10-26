@@ -247,12 +247,12 @@ locals {
       admin_port       = var.admin_port
       fgt_password     = var.fgt_password
       healthcheck_port = var.healthcheck_port
-      port1-ip = google_compute_address.compute_address["fgt1-untrust-ip"].address
-      port2-ip = google_compute_address.compute_address["fgt1-trust-ip"].address
-      elb_ip = google_compute_address.compute_address["elb-static-ip"].address
-      ilb_ip = google_compute_address.compute_address["ilb-ip"].address
-      ext_gw = google_compute_subnetwork.compute_subnetwork["untrust-subnet-1"].gateway_address
-      int_gw = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].gateway_address
+      port1-ip         = google_compute_address.compute_address["fgt1-untrust-ip"].address
+      port2-ip         = google_compute_address.compute_address["fgt1-trust-ip"].address
+      elb_ip           = google_compute_address.compute_address["elb-static-ip"].address
+      ilb_ip           = google_compute_address.compute_address["ilb-ip"].address
+      ext_gw           = google_compute_subnetwork.compute_subnetwork["untrust-subnet-1"].gateway_address
+      int_gw           = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].gateway_address
     }
     "fgt2-template" = {
       fgt_name         = "fgt2"
@@ -260,12 +260,12 @@ locals {
       admin_port       = var.admin_port
       fgt_password     = var.fgt_password
       healthcheck_port = var.healthcheck_port
-      port1-ip = google_compute_address.compute_address["fgt2-untrust-ip"].address
-      port2-ip = google_compute_address.compute_address["fgt2-trust-ip"].address
-      elb_ip = google_compute_address.compute_address["elb-static-ip"].address
-      ilb_ip = google_compute_address.compute_address["ilb-ip"].address
-      ext_gw = google_compute_subnetwork.compute_subnetwork["untrust-subnet-1"].gateway_address
-      int_gw = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].gateway_address
+      port1-ip         = google_compute_address.compute_address["fgt2-untrust-ip"].address
+      port2-ip         = google_compute_address.compute_address["fgt2-trust-ip"].address
+      elb_ip           = google_compute_address.compute_address["elb-static-ip"].address
+      ilb_ip           = google_compute_address.compute_address["ilb-ip"].address
+      ext_gw           = google_compute_subnetwork.compute_subnetwork["untrust-subnet-1"].gateway_address
+      int_gw           = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].gateway_address
     }
   }
 
@@ -291,11 +291,11 @@ locals {
   # back end sets
   ibess = {
     "ilb_bes1" = {
-      name                  = "${local.prefix}-ilb-bes1-${random_string.string.result}"
-      region                = local.region
-      network               = google_compute_network.compute_network["trust-vpc"].self_link
-      group1                = google_compute_instance_group.fgt-umigs["fgt1-umig"].self_link
-      group2                = google_compute_instance_group.fgt-umigs["fgt2-umig"].self_link
+      name    = "${local.prefix}-ilb-bes1-${random_string.string.result}"
+      region  = local.region
+      network = google_compute_network.compute_network["trust-vpc"].self_link
+      group1  = google_compute_instance_group.fgt-umigs["fgt1-umig"].self_link
+      group2  = google_compute_instance_group.fgt-umigs["fgt2-umig"].self_link
     }
   }
   ebess = {

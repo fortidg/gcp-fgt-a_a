@@ -129,10 +129,10 @@ resource "google_compute_region_health_check" "health_check" {
 resource "google_compute_region_backend_service" "ibes" {
   for_each = local.ibess
 
-  name                  = each.value.name
-  region                = each.value.region
-  network = each.value.network
-  protocol              = "UNSPECIFIED"
+  name     = each.value.name
+  region   = each.value.region
+  network  = each.value.network
+  protocol = "UNSPECIFIED"
 
   backend {
     group = each.value.group1

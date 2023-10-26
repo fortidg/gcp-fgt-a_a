@@ -1,3 +1,7 @@
+project = "project_name"
+region  = "region_name"
+zone    = "az1 name"
+zone2 = "az2 name"
 
 # Prefixed to all resources
 prefix = "resource_prefix"
