@@ -1,14 +1,13 @@
-project               = "project_name"
-region                = "region_name"
-zone                  = "zone_name"
-zone2                  = "zone2_name"
 
 # Prefixed to all resources
 prefix = "resource_prefix"
 
 # FortiGate image and instance type
-# 7.4.0 PAYG is projects/fortigcp-project-001/global/images/fortinet-fgtondemand-740-20230512-001-w-license
-fortigate_vm_image     = "projects/fortigcp-project-001/global/images/fortinet-fgtondemand-740-20230512-001-w-license"
+# 7.2.6 PAYG is projects/fortigcp-project-001/global/images/fortinet-fgtondemand-726-20231016-001-w-license
+# 7.2.6 BYOL is projects/fortigcp-project-001/global/images/fortinet-fgt-726-20231016-001-w-license
+# 7.4.1 PAYG is projects/fortigcp-project-001/global/images/fortinet-fgtondemand-741-20230905-001-w-license
+# 7.4.1 BYOL is projects/fortigcp-project-001/global/images/fortinet-fgt-741-20230905-001-w-license
+fortigate_vm_image     = "projects/fortigcp-project-001/global/images/fortinet-fgt-741-20230905-001-w-license"
 fortigate_machine_type = "n2-standard-2"
 fortigate_license_files = {
   fgt1_instance    = { name = null }
@@ -17,6 +16,3 @@ fortigate_license_files = {
 admin_port = 8443
 fgt_password = "fortinet"
 
-# Windows image and instance type
-windows_vm_image     = "projects/windows-cloud/global/images/windows-server-2019-dc-v20230809"
-windows_machine_type = "n1-standard-1"
