@@ -213,7 +213,7 @@ resource "google_compute_router_nat" "cloud_nat" {
 resource "google_compute_route" "default_route" {
   name                   = "${var.prefix}-rt-default-via-fgt-${random_string.string.result}"
   dest_range             = "0.0.0.0/0"
-  network                = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].name
+  network                = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].self_link
   next_hop_ilb           = google_compute_forwarding_rule.ifwd_rule["ilb_fwd_1"].self_link
   priority               = 100
 }
