@@ -75,5 +75,6 @@ config firewall policy
         set schedule "always"
         set service "ALL"
         set comments "out to internet"
+        set nat enable
     next
 end
