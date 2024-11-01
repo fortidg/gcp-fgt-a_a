@@ -8,14 +8,9 @@ locals {
 
   fortigate_machine_type  = var.fortigate_machine_type
   fortigate_vm_image      = var.fortigate_vm_image
+  fortigate_license_files = var.fortigate_license_files
   
-  license_type = "flex" # can be byol, flex, or payg, make sure the license is correct for the sku
-  fgt1_license_token = var.fgt1_license_token
-  fgt2_license_token = var.fgt2_license_token
-
-  fgt1_license_file = var.fgt1_license_file
-  fgt2_license_file = var.fgt2_license_file
-
+  
   #######################
   # Static IPs
   #######################
@@ -198,6 +193,7 @@ locals {
 
       metadata = {
         user-data = data.template_file.template_file["fgt1-template"].rendered
+        license   = local.fortigate_license_files["fgt1_instance"].name != null ? file(local.fortigate_license_files["fgt1_instance"].name) : null
       }
       service_account_scopes    = ["cloud-platform"]
       allow_stopping_for_update = true
@@ -234,6 +230,7 @@ locals {
 
       metadata = {
         user-data = data.template_file.template_file["fgt2-template"].rendered
+        license   = local.fortigate_license_files["fgt2_instance"].name != null ? file(local.fortigate_license_files["branch_fgt_instance"].name) : null
       }
       service_account_scopes    = ["cloud-platform"]
       allow_stopping_for_update = true
@@ -247,13 +244,10 @@ locals {
   template_files = {
     "fgt1-template" = {
       fgt_name         = "fgt1"
-      template_file    = "fgt.conf"
+      template_file    = "fgt.tpl"
       admin_port       = var.admin_port
       fgt_password     = var.fgt_password
       healthcheck_port = var.healthcheck_port
-      license_type     = local.license_type
-      license_token    = local.fgt1_license_token
-      license_file    = local.fgt1_license_file
       port1-ip         = google_compute_address.compute_address["fgt1-untrust-ip"].address
       port2-ip         = google_compute_address.compute_address["fgt1-trust-ip"].address
       elb_ip           = google_compute_address.compute_address["elb-static-ip"].address
@@ -263,13 +257,10 @@ locals {
     }
     "fgt2-template" = {
       fgt_name         = "fgt2"
-      template_file    = "fgt.conf"
+      template_file    = "fgt.tpl"
       admin_port       = var.admin_port
       fgt_password     = var.fgt_password
       healthcheck_port = var.healthcheck_port
-      license_type     = local.license_type
-      license_token    = local.fgt2_license_token
-      license_file     = local.fgt2_license_file
       port1-ip         = google_compute_address.compute_address["fgt2-untrust-ip"].address
       port2-ip         = google_compute_address.compute_address["fgt2-trust-ip"].address
       elb_ip           = google_compute_address.compute_address["elb-static-ip"].address

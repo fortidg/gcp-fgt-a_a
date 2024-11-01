@@ -9,8 +9,6 @@ variable "prefix" {}
 variable "fortigate_machine_type" {}
 variable "fortigate_vm_image" {}
 
-variable "fortigate_license_files" {}
-
 variable "fgt_username" {
   type        = string
   default     = ""
@@ -34,4 +32,30 @@ variable "healthcheck_port" {
   type        = number
   default     = 8008
   description = "Port used for LB health checks"
+}
+
+variable "fgt1_license_token" {
+  type        = string
+  default     = "null"
+  description = "FortiFlex Token"
+}
+
+variable "fgt2_license_token" {
+  type        = string
+  default     = "null"
+  description = "FortiFlex Token"
+}
+
+variable "fgt1_license_file" {
+  type        = string
+  default     = "null"
+  description = "License file in local folder"
+  
+}
+
+variable "fgt2_license_file" {
+  type        = string
+  default     = "null"
+  description = "license file in local folder"
+  
 }
