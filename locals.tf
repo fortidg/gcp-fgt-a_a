@@ -198,6 +198,7 @@ locals {
 
       metadata = {
         user-data = data.template_file.template_file["fgt1-template"].rendered
+        license_type = local.license_type
       }
       service_account_scopes    = ["cloud-platform"]
       allow_stopping_for_update = true
@@ -234,6 +235,7 @@ locals {
 
       metadata = {
         user-data = data.template_file.template_file["fgt2-template"].rendered
+        license_type = local.license_type
       }
       service_account_scopes    = ["cloud-platform"]
       allow_stopping_for_update = true
