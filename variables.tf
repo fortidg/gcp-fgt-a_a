@@ -50,12 +50,18 @@ variable "fgt1_license_file" {
   type        = string
   default     = "null"
   description = "License file in local folder"
-  
+
 }
 
 variable "fgt2_license_file" {
   type        = string
   default     = "null"
   description = "license file in local folder"
-  
+
+}
+
+variable "license_type" {
+  type = string
+  default = "flex"
+  description = "can be byol, flex, or payg, make sure the license is correct for the sku"
 }

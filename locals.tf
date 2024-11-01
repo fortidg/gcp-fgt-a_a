@@ -6,10 +6,10 @@ locals {
   zone   = var.zone
   zone2  = var.zone2
 
-  fortigate_machine_type  = var.fortigate_machine_type
-  fortigate_vm_image      = var.fortigate_vm_image
-  
-  license_type = "flex" # can be byol, flex, or payg, make sure the license is correct for the sku
+  fortigate_machine_type = var.fortigate_machine_type
+  fortigate_vm_image     = var.fortigate_vm_image
+
+  license_type       = var.license_type 
   fgt1_license_token = var.fgt1_license_token
   fgt2_license_token = var.fgt2_license_token
 
@@ -253,7 +253,7 @@ locals {
       healthcheck_port = var.healthcheck_port
       license_type     = local.license_type
       license_token    = local.fgt1_license_token
-      license_file    = local.fgt1_license_file
+      license_file     = local.fgt1_license_file
       port1-ip         = google_compute_address.compute_address["fgt1-untrust-ip"].address
       port2-ip         = google_compute_address.compute_address["fgt1-trust-ip"].address
       elb_ip           = google_compute_address.compute_address["elb-static-ip"].address

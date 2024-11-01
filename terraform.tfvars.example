@@ -9,9 +9,9 @@ prefix = "resource_prefix"
 # FortiGate image and instance type
 # 7.2.8 PAYG is projects/fortigcp-project-001/global/images/fortinet-fgtondemand-728-20240318-001-w-license
 # 7.2.8 BYOL is projects/fortigcp-project-001/global/images/fortinet-fgt-728-20240318-001-w-license
-# 7.4.1 PAYG is projects/fortigcp-project-001/global/images/fortinet-fgtondemand-743-20240208-001-w-license
-# 7.4.1 BYOL is projects/fortigcp-project-001/global/images/fortinet-fgt-743-20240208-001-w-license
-fortigate_vm_image     = "projects/fortigcp-project-001/global/images/fortinet-fgtondemand-743-20240208-001-w-license"
+# 7.4.3 PAYG is projects/fortigcp-project-001/global/images/fortinet-fgtondemand-743-20240208-001-w-license
+# 7.4.3 BYOL is projects/fortigcp-project-001/global/images/fortinet-fgt-743-20240208-001-w-license
+fortigate_vm_image     = "projects/fortigcp-project-001/global/images/ fortinet-fgt-745-20240918-001-w-license"
 fortigate_machine_type = "n2-standard-2"
 #fgt1_license_file = "fgt1.lic"
 #fgt2_license_file = "fgt2.lic"
