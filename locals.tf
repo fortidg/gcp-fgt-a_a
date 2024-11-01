@@ -198,7 +198,6 @@ locals {
 
       metadata = {
         user-data = data.template_file.template_file["fgt1-template"].rendered
-        license_type = local.license_type
       }
       service_account_scopes    = ["cloud-platform"]
       allow_stopping_for_update = true
@@ -235,7 +234,6 @@ locals {
 
       metadata = {
         user-data = data.template_file.template_file["fgt2-template"].rendered
-        license_type = local.license_type
       }
       service_account_scopes    = ["cloud-platform"]
       allow_stopping_for_update = true
@@ -253,7 +251,6 @@ locals {
       admin_port       = var.admin_port
       fgt_password     = var.fgt_password
       healthcheck_port = var.healthcheck_port
-      license_type     = local.license_type
       license_token    = local.fgt1_license_token
       license_file     = local.fgt1_license_file
       port1-ip         = google_compute_address.compute_address["fgt1-untrust-ip"].address
@@ -269,7 +266,6 @@ locals {
       admin_port       = var.admin_port
       fgt_password     = var.fgt_password
       healthcheck_port = var.healthcheck_port
-      license_type     = local.license_type
       license_token    = local.fgt2_license_token
       license_file     = local.fgt2_license_file
       port1-ip         = google_compute_address.compute_address["fgt2-untrust-ip"].address
