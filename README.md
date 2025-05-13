@@ -10,16 +10,29 @@
 1. Run `terraform plan`.
 1. If the plan looks good, run `terraform apply`.
 
-The prefix mentioned above is simply a memorable string of text to differentiate the resources deployed by this code.
+### Licensing
 
-If you use the Pay As You Go (PAYG) image or if you want to use FortiFlex, leave the Fortigate names in terraform.tfvars set as null.  
+There are three options for licensing the FortiGate VMs:
 
-You can use paygo, byol or fortiflex licensing in this envrionment.  You will need to change "license_type" in locals.tf.
+"flex" (default) - Set license_type to "flex" and add two unused FortiFlex tokens to the "flex_tokens" variable.  Ensure you are using the BYOL FortiGate image.  For Example:
 
-If you would like use the Bring Your Own License (BYOL) image, please add the license files in the local directory and modify the names in terraform.tfvars accordingly.  If you leave the names as null for the BYOL instance, you can manually upload the licenses later or use FortiFlex.  
+```sh
+flex_tokens = ["C5095E394QAZ3E640112", "DC65640C2QAZDD9CBC76"]
+```
 
-If you woould like to use FortiFlex, please add valid unused tokens to terraform.tfvars
+"byol" - Set license_type to "byol" and copy two valid fortigate licenses into the local directory.  Ensure you are using the BYOL FortiGate image. Update terraform.tfvars with the names of the licenses.  For example:
+
+```sh
+fortigate_license_files = {
+  fgt1_instance    = { name = license1.lic }
+  fgt2_instance = { name = license2.lic }
+}
+```
+
+"payg" - Set license_type to "payg" and ensure that you are using the PAYG FortiGate Image  
 
 If you wish to deploy FortGates in only one zone, you can use the same value for "zone" and "zone2".
 
 FortiGates can be managed by putting `https://<fortigate-public-ip>:8443` into the url bar of your favorite browser. These IP addresses will be part of the Terraform outputs upon using apply.
+
+

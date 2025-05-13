@@ -9,12 +9,10 @@ locals {
   fortigate_machine_type = var.fortigate_machine_type
   fortigate_vm_image     = var.fortigate_vm_image
 
-  license_type       = var.license_type 
-  fgt1_license_token = var.fgt1_license_token
-  fgt2_license_token = var.fgt2_license_token
 
-  fgt1_license_file = var.fgt1_license_file
-  fgt2_license_file = var.fgt2_license_file
+  fortigate_license_files = var.fortigate_license_files
+  flex_tokens            = var.flex_tokens
+  license_type = var.license_type
 
   #######################
   # Static IPs
@@ -251,8 +249,9 @@ locals {
       admin_port       = var.admin_port
       fgt_password     = var.fgt_password
       healthcheck_port = var.healthcheck_port
-      license_token    = local.fgt1_license_token
-      license_file     = local.fgt1_license_file
+      license_type    = var.license_type
+      license_token = local.flex_tokens[0] != "" ? local.flex_tokens[0] : null
+      license_file = local.fortigate_license_files["fgt1_instance"].name != null ? file(local.fortigate_license_files["fgt1_instance"].name) : null
       port1-ip         = google_compute_address.compute_address["fgt1-untrust-ip"].address
       port2-ip         = google_compute_address.compute_address["fgt1-trust-ip"].address
       elb_ip           = google_compute_address.compute_address["elb-static-ip"].address
@@ -266,8 +265,9 @@ locals {
       admin_port       = var.admin_port
       fgt_password     = var.fgt_password
       healthcheck_port = var.healthcheck_port
-      license_token    = local.fgt2_license_token
-      license_file     = local.fgt2_license_file
+      license_type    = var.license_type
+      license_token = local.flex_tokens[1] != "" ? local.flex_tokens[1] : null
+      license_file = local.fortigate_license_files["fgt2_instance"].name != null ? file(local.fortigate_license_files["fgt2_instance"].name) : null
       port1-ip         = google_compute_address.compute_address["fgt2-untrust-ip"].address
       port2-ip         = google_compute_address.compute_address["fgt2-trust-ip"].address
       elb_ip           = google_compute_address.compute_address["elb-static-ip"].address
