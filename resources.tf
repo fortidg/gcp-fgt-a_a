@@ -135,11 +135,11 @@ resource "google_compute_region_backend_service" "ibes" {
   protocol = "UNSPECIFIED"
 
   backend {
-    group = each.value.group1
+    group          = each.value.group1
     balancing_mode = "CONNECTION"
   }
   backend {
-    group = each.value.group2
+    group          = each.value.group2
     balancing_mode = "CONNECTION"
   }
 
@@ -156,11 +156,11 @@ resource "google_compute_region_backend_service" "ebes" {
   protocol              = "UNSPECIFIED"
 
   backend {
-    group = each.value.group1
+    group          = each.value.group1
     balancing_mode = "CONNECTION"
   }
   backend {
-    group = each.value.group2
+    group          = each.value.group2
     balancing_mode = "CONNECTION"
   }
 

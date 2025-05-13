@@ -11,8 +11,9 @@ locals {
 
 
   fortigate_license_files = var.fortigate_license_files
-  flex_tokens            = var.flex_tokens
-  license_type = var.license_type
+  flex_tokens             = var.flex_tokens
+  license_type            = var.license_type
+  fgsp                  = var.fgsp
 
   #######################
   # Static IPs
@@ -249,15 +250,18 @@ locals {
       admin_port       = var.admin_port
       fgt_password     = var.fgt_password
       healthcheck_port = var.healthcheck_port
-      license_type    = var.license_type
-      license_token = local.flex_tokens[0] != "" ? local.flex_tokens[0] : null
-      license_file = local.fortigate_license_files["fgt1_instance"].name != null ? file(local.fortigate_license_files["fgt1_instance"].name) : null
+      license_type     = var.license_type
+      license_token    = local.flex_tokens[0] != "" ? local.flex_tokens[0] : null
+      license_file     = local.fortigate_license_files["fgt1_instance"].name != null ? file(local.fortigate_license_files["fgt1_instance"].name) : null
       port1-ip         = google_compute_address.compute_address["fgt1-untrust-ip"].address
       port2-ip         = google_compute_address.compute_address["fgt1-trust-ip"].address
       elb_ip           = google_compute_address.compute_address["elb-static-ip"].address
       ilb_ip           = google_compute_address.compute_address["ilb-ip"].address
       ext_gw           = google_compute_subnetwork.compute_subnetwork["untrust-subnet-1"].gateway_address
       int_gw           = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].gateway_address
+      fgsp             = local.fgsp
+      ha_index         = "1"
+      peerip           = google_compute_address.compute_address["fgt2-trust-ip"].address
     }
     "fgt2-template" = {
       fgt_name         = "fgt2"
@@ -265,15 +269,18 @@ locals {
       admin_port       = var.admin_port
       fgt_password     = var.fgt_password
       healthcheck_port = var.healthcheck_port
-      license_type    = var.license_type
-      license_token = local.flex_tokens[1] != "" ? local.flex_tokens[1] : null
-      license_file = local.fortigate_license_files["fgt2_instance"].name != null ? file(local.fortigate_license_files["fgt2_instance"].name) : null
+      license_type     = var.license_type
+      license_token    = local.flex_tokens[1] != "" ? local.flex_tokens[1] : null
+      license_file     = local.fortigate_license_files["fgt2_instance"].name != null ? file(local.fortigate_license_files["fgt2_instance"].name) : null
       port1-ip         = google_compute_address.compute_address["fgt2-untrust-ip"].address
       port2-ip         = google_compute_address.compute_address["fgt2-trust-ip"].address
       elb_ip           = google_compute_address.compute_address["elb-static-ip"].address
       ilb_ip           = google_compute_address.compute_address["ilb-ip"].address
       ext_gw           = google_compute_subnetwork.compute_subnetwork["untrust-subnet-1"].gateway_address
       int_gw           = google_compute_subnetwork.compute_subnetwork["trust-subnet-1"].gateway_address
+      fgsp             = local.fgsp
+      ha_index         = "2"
+      peerip           = google_compute_address.compute_address["fgt1-trust-ip"].address
     }
   }
 

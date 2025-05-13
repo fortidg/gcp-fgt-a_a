@@ -47,3 +47,10 @@ variable "license_type" {
 }
 
 variable "fortigate_license_files" {}
+
+variable "fgsp" {
+  type        = string
+  default     = "false"
+  description = "FortiGate FGSP mode: false"
+  }
+

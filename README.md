@@ -36,3 +36,8 @@ If you wish to deploy FortGates in only one zone, you can use the same value for
 FortiGates can be managed by putting `https://<fortigate-public-ip>:8443` into the url bar of your favorite browser. These IP addresses will be part of the Terraform outputs upon using apply.
 
 
+### FGSP Note
+
+By default, FGSP is disabled.  If you want to enable FGSP of this change the value of the **fgsp** variable to "true" in the terraform.tfvars file.
+
+https://docs.fortinet.com/document/fortigate/7.6.2/administration-guide/668583/fgsp
