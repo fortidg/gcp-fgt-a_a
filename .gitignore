@@ -11,3 +11,4 @@
 .terraform*
 *.pem
 *.lic
+*tf.plan
